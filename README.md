@@ -1,5 +1,6 @@
 # CMSC137 Project (PacMan Reawakened)
-# Members
+
+* Members
   - Racasa, Marie Loraine
   - Tagaza, Joreyn Angelo
   - Valencia, Rafiel Timothy
