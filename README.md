@@ -13,5 +13,6 @@
         - export CLASSPATH=./compiler/protobuf-java-3.6.1.jar:$CLASSPATH
         - javac -d . *.java && java Main
     - Remove .class files
-        - rm -r *.class && rm -rf ./packet && rm -r ./src/*.class
+        - rm -r \*.class && rm -r ./packet/\*.class && rm -r ./src/\*.class
+    - Do not push packet folder
 
