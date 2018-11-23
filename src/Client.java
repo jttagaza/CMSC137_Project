@@ -22,20 +22,20 @@ public class Client {
             System.out.println("Connected to " + this.socket.getRemoteSocketAddress());
             User user = new User();
 
-            // Connection connect = new Connection(socket);
-            // ConnectPacket sentConnection = connect.createConnection(user.getPlayer(), null, ConnectPacket.Update.NEW);
-            // connect.send(sentConnection);
-            // ConnectPacket receiveConnection = connect.receive();
-            // System.out.println(receiveConnection);
-
             Lobby lobby = new Lobby(socket);
             CreateLobbyPacket sentLobby = lobby.createLobby("AB5L", 4);
             lobby.send(sentLobby);
             CreateLobbyPacket receiveLobby = lobby.receive();
             System.out.println(receiveLobby);
 
+            Connection connect = new Connection(socket);
+            ConnectPacket sentConnection = connect.createConnection(user.getPlayer(), receiveLobby.getLobbyId(), ConnectPacket.Update.NEW);
+            connect.send(sentConnection);
+            ConnectPacket receiveConnection = connect.receive();
+            System.out.println(receiveConnection);
+
             Chat chat = new Chat(socket);
-            ChatPacket sentMsg = chat.createChat("Hello", null, "AB5L");
+            ChatPacket sentMsg = chat.createChat("Hello", user.getPlayer(), "AB5L");
             chat.send(sentMsg);
             ChatPacket receiveMsg = chat.receive();
             System.out.println(receiveMsg);
