@@ -49,10 +49,14 @@ public class Client {
                 connect.send(sentConnection);
                 ConnectPacket receiveConnection = connect.receive();
 
-                Thread chat = new Chat(socket, connect, user, lobbyId);
-                chat.start();
+                Chat chat = new Chat(socket, connect, user, lobbyId);
+                Thread chatS = new ChatSend(socket, connect, user, lobbyId);
+                Thread chatR = new ChatReceive(socket, connect, user, lobbyId);
+                chatS.start();
+                chatR.start();
                 try {
-                    chat.join();
+                    chatS.join();
+                    chatR.join();
                 } catch(Exception e) {};
 
             }while(choice != user.EXIT);

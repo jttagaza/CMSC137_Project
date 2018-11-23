@@ -14,7 +14,7 @@ import java.util.Scanner;
 import java.io.IOException;
 import java.net.UnknownHostException;
 
-class Chat {
+class ChatSend extends Thread {
     private Socket socket;
     private Connection conn;
     private User user;
@@ -31,10 +31,31 @@ class Chat {
         return sentMsg;
     }
 
-    public Chat(Socket socket, Connection conn, User user, String lobbyId) {
+    void send(){
+        try {
+            Scanner str = new Scanner(System.in);
+            String message = str.nextLine();
+            ChatPacket sentMsg = this.createChat(message, this.user.getPlayer(), this.lobbyId);
+            OutputStream output = this.socket.getOutputStream();
+            DataOutputStream sender = new DataOutputStream(output);
+            sender.write(sentMsg.toByteArray());
+        }
+        catch(IOException err) {
+            err.printStackTrace();
+        }
+    }
+
+    public ChatSend(Socket socket, Connection conn, User user, String lobbyId) {
         this.socket = socket;
         this.conn = conn;
         this.user = user;
         this.lobbyId = lobbyId;
+    }
+
+    @Override
+    public void run(){
+        while(true){
+            this.send();
+        }
     }
 }
