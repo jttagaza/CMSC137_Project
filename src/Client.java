@@ -21,31 +21,41 @@ public class Client {
             this.socket = new Socket(addr, port);
             System.out.println("Connected to " + this.socket.getRemoteSocketAddress());
             User user = new User();
+            int choice;
 
-            Lobby lobby = new Lobby(socket);
-            CreateLobbyPacket sentLobby = lobby.createLobby("AB5L", 4);
-            lobby.send(sentLobby);
-            CreateLobbyPacket receiveLobby = lobby.receive();
-            System.out.println(receiveLobby);
+            do{
+                String lobbyId;
+                choice = user.menu();
 
-            Connection connect = new Connection(socket);
-            ConnectPacket sentConnection = connect.createConnection(user.getPlayer(), receiveLobby.getLobbyId());
-            connect.send(sentConnection);
-            ConnectPacket receiveConnection = connect.receive();
-            System.out.println(receiveConnection);
+                if (choice == user.CREATE_LOBBY){
+                    Lobby lobby = new Lobby(socket);
+                    CreateLobbyPacket sentLobby = lobby.createLobby(null, 4);
+                    lobby.send(sentLobby);
+                    CreateLobbyPacket receiveLobby = lobby.receive();
+                    lobbyId = receiveLobby.getLobbyId();
+                    System.out.println(user.getPlayer().getName() + " successfully created new lobby " + lobbyId + ".");
+                }
+                else if (choice == user.CONNECT_LOBBY) {
+                    System.out.print("Enter Lobby Id: ");
+                    Scanner str = new Scanner(System.in);
+                    lobbyId = str.nextLine();
+                } else {
+                    lobbyId = null;
+                    System.exit(0);
+                }
 
-            Chat chat = new Chat(socket);
-            ChatPacket sentMsg = chat.createChat("Hello", user.getPlayer(), "AB5L");
-            chat.send(sentMsg);
-            ChatPacket receiveMsg = chat.receive();
-            System.out.println(receiveMsg);
+                Connection connect = new Connection(socket);
+                ConnectPacket sentConnection = connect.createConnection(user.getPlayer(), lobbyId);
+                connect.send(sentConnection);
+                ConnectPacket receiveConnection = connect.receive();
 
-            Disconnection disconnect = new Disconnection(socket);
-            DisconnectPacket sentDisconnection = disconnect.removeConnection(user.getPlayer());
-            disconnect.send(sentDisconnection);
-            // Err. Receive function on Disconnect just waiting for empty Response
-            // DisconnectPacket receiveDisconnection = disconnect.receive();
-            // System.out.println(receiveDisconnection);
+                Thread chat = new Chat(socket, connect, user, lobbyId);
+                chat.start();
+                try {
+                    chat.join();
+                } catch(Exception e) {};
+
+            }while(choice != user.EXIT);
 
             this.socket.close();
         }
