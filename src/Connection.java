@@ -16,13 +16,11 @@ import java.net.UnknownHostException;
 class Connection {
     private Socket socket;
 
-    ConnectPacket createConnection(Player player, String lobbyId, ConnectPacket.Update update){
+    ConnectPacket createConnection(Player player, String lobbyId){
         ConnectPacket.Builder connectBuilder = ConnectPacket.newBuilder();
         connectBuilder.setType(PacketType.CONNECT);
         if(player != null)      connectBuilder.setPlayer(player);
         if(lobbyId != null)     connectBuilder.setLobbyId(lobbyId);
-        if(update == ConnectPacket.Update.SELF || update == ConnectPacket.Update.NEW)  
-            connectBuilder.setUpdate(update);
         ConnectPacket connect = connectBuilder.build();
 
         return connect;
