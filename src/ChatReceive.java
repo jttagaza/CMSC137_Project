@@ -14,11 +14,18 @@ import java.util.Scanner;
 import java.io.IOException;
 import java.net.UnknownHostException;
 
-class ChatReceive extends Thread {
+class ChatReceive implements Runnable {
     private Socket socket;
-    private Connection conn;
     private User user;
     private String lobbyId;
+    private Boolean connected;
+
+    public ChatReceive(Socket socket, User user, String lobbyId) {
+        this.socket = socket;
+        this.user = user;
+        this.lobbyId = lobbyId;
+        this.connected = true;
+    }
 
     void receive(){
         try {
@@ -39,15 +46,20 @@ class ChatReceive extends Thread {
                     break;
                 case CHAT:
                     ChatPacket chat = ChatPacket.parseFrom(bytes);
-                    if(chat.hasPlayer())
+                    if(chat.getMessage().equals("quit")) {
+                        if(chat.getPlayer().getName().equals(user.getPlayer().getName())){
+                            System.out.println(chat.getPlayer().getName() + " has disconnected from the lobby.");
+                            this.connected = false;
+                        }
+                    }
+                    else if(chat.hasPlayer())
                         System.out.println(chat.getPlayer().getName() + ": " + chat.getMessage());
                     else
                         System.out.println(user.getPlayer().getName() + ": " + chat.getMessage());
                     break;
                 case DISCONNECT:
                     DisconnectPacket disconnect = DisconnectPacket.parseFrom(bytes);
-                    player = disconnect.getPlayer().getName();
-                    System.out.println(player + " has disconnected from the lobby.");
+                    System.out.println(disconnect.getPlayer().getName() + " has disconnected from the lobby.");
                     break;
             }
         }
@@ -56,16 +68,9 @@ class ChatReceive extends Thread {
         }
     }
 
-    public ChatReceive(Socket socket, Connection conn, User user, String lobbyId) {
-        this.socket = socket;
-        this.conn = conn;
-        this.user = user;
-        this.lobbyId = lobbyId;
-    }
-
     @Override
     public void run(){
-        while(true){
+        while(this.connected){
             this.receive();
         }
     }
