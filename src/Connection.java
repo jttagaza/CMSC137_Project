@@ -16,6 +16,10 @@ import java.net.UnknownHostException;
 class Connection {
     private Socket socket;
 
+    public Connection(Socket socket) {
+        this.socket = socket;
+    }
+
     ConnectPacket createConnection(Player player, String lobbyId){
         ConnectPacket.Builder connectBuilder = ConnectPacket.newBuilder();
         connectBuilder.setType(PacketType.CONNECT);
@@ -51,9 +55,5 @@ class Connection {
             err.printStackTrace();
             return null;
         }
-    }
-
-    public Connection(Socket socket) {
-        this.socket = socket;
     }
 }

@@ -17,6 +17,13 @@ class User {
     public final static int CONNECT_LOBBY = 2;
     public final static int EXIT = 0;
 
+    public User() {
+        System.out.print("Enter Name: ");
+        Scanner str = new Scanner(System.in);
+        String name = str.nextLine();
+        this.player = Player.newBuilder().setName(name).build();
+    }
+
     public int menu() {
         System.out.println("[1] Create Lobby");
         System.out.println("[2] Connect to a Lobby");
@@ -26,13 +33,6 @@ class User {
         Scanner str = new Scanner(System.in);
         int choice = str.nextInt();
         return choice;
-    }
-
-    public User() {
-        System.out.print("Enter Name: ");
-        Scanner str = new Scanner(System.in);
-        String name = str.nextLine();
-        player = Player.newBuilder().setName(name).build();
     }
 
     public Player getPlayer() {

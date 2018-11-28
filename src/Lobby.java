@@ -16,6 +16,10 @@ import java.net.UnknownHostException;
 class Lobby {
     private Socket socket;
 
+    public Lobby(Socket socket) {
+        this.socket = socket;
+    }
+
     CreateLobbyPacket createLobby(String lobbyId, int maxPlayers){
         CreateLobbyPacket.Builder lobbyBuilder = CreateLobbyPacket.newBuilder();
         lobbyBuilder.setType(PacketType.CREATE_LOBBY);
@@ -51,9 +55,5 @@ class Lobby {
             err.printStackTrace();
             return null;
         }
-    }
-
-    public Lobby(Socket socket) {
-        this.socket = socket;
     }
 }
