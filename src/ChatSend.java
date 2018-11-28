@@ -14,47 +14,68 @@ import java.util.Scanner;
 import java.io.IOException;
 import java.net.UnknownHostException;
 
-class ChatSend extends Thread {
+class ChatSend implements Runnable {
     private Socket socket;
-    private Connection conn;
     private User user;
     private String lobbyId;
+    private Boolean connected;
 
-    ChatPacket createChat(String message, Player player, String lobbyId){
+    public ChatSend(Socket socket, User user, String lobbyId) {
+        this.socket = socket;
+        this.user = user;
+        this.lobbyId = lobbyId;
+        this.connected = true;
+    }
+
+    void joinChat(String message, Player player, String lobbyId){
         ChatPacket.Builder chatBuilder = ChatPacket.newBuilder();
         chatBuilder.setType(PacketType.CHAT);
         chatBuilder.setMessage(message);
         if(player != null)  chatBuilder.setPlayer(player);
         if(lobbyId != null) chatBuilder.setLobbyId(lobbyId);
-        ChatPacket sentMsg = chatBuilder.build();
+        ChatPacket connect = chatBuilder.build();
 
-        return sentMsg;
-    }
-
-    void send(){
         try {
-            Scanner str = new Scanner(System.in);
-            String message = str.nextLine();
-            ChatPacket sentMsg = this.createChat(message, this.user.getPlayer(), this.lobbyId);
             OutputStream output = this.socket.getOutputStream();
             DataOutputStream sender = new DataOutputStream(output);
-            sender.write(sentMsg.toByteArray());
+            sender.write(connect.toByteArray());
         }
         catch(IOException err) {
             err.printStackTrace();
         }
     }
 
-    public ChatSend(Socket socket, Connection conn, User user, String lobbyId) {
-        this.socket = socket;
-        this.conn = conn;
-        this.user = user;
-        this.lobbyId = lobbyId;
+    void leaveChat(Player player){
+        DisconnectPacket.Builder disconnectBuilder = DisconnectPacket.newBuilder();
+        disconnectBuilder.setType(PacketType.DISCONNECT);
+        if(player != null) disconnectBuilder.setPlayer(player);
+        DisconnectPacket disconnect = disconnectBuilder.build();
+
+        try {
+            OutputStream output = this.socket.getOutputStream();
+            DataOutputStream sender = new DataOutputStream(output);
+            sender.write(disconnect.toByteArray());
+        }
+        catch(IOException err) {
+            err.printStackTrace();
+        }
+    }
+
+    void send(){
+        Scanner str = new Scanner(System.in);
+        String message = str.nextLine();
+
+        this.joinChat(message, this.user.getPlayer(), this.lobbyId);
+        
+        if (message.equals("quit")) {
+            this.leaveChat(this.user.getPlayer());
+            this.connected = false;
+        }
     }
 
     @Override
     public void run(){
-        while(true){
+        while(this.connected){
             this.send();
         }
     }
