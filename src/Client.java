@@ -24,7 +24,7 @@ public class Client {
             int choice;
 
             do{
-                String lobbyId;
+                String lobbyId = null;
                 choice = user.menu();
 
                 if (choice == user.CREATE_LOBBY){
@@ -40,7 +40,6 @@ public class Client {
                     Scanner str = new Scanner(System.in);
                     lobbyId = str.nextLine();
                 } else {
-                    lobbyId = null;
                     System.exit(0);
                 }
 
@@ -48,10 +47,12 @@ public class Client {
                 ConnectPacket sentConnection = connect.createConnection(user.getPlayer(), lobbyId);
                 connect.send(sentConnection);
                 ConnectPacket receiveConnection = connect.receive();
+                System.out.println(user.getPlayer().getName() + " has connected to the lobby.");
 
-                Chat chat = new Chat(socket, connect, user, lobbyId);
-                Thread chatS = new ChatSend(socket, connect, user, lobbyId);
-                Thread chatR = new ChatReceive(socket, connect, user, lobbyId);
+                ChatSend chatSend = new ChatSend(socket, user, lobbyId);
+                Thread chatS = new Thread(chatSend);
+                ChatReceive chatReceive = new ChatReceive(socket, user, lobbyId);
+                Thread chatR = new Thread(chatReceive);
                 chatS.start();
                 chatR.start();
                 try {
