@@ -3,10 +3,6 @@ package src;
 import packet.PlayerProtos.*;
 import packet.TcpPacketProtos.TcpPacket.*;
 
-import java.io.InputStream;
-import java.io.OutputStream;
-import java.io.DataInputStream;
-import java.io.DataOutputStream;
 import java.net.Socket;
 import java.util.Scanner;
 
@@ -17,22 +13,23 @@ public class Client {
 
     public Client(String addr, int port) {
         try {
-            User user = new User();
+            Packet packet = new Packet();
+            User user = new User(packet);
             int choice;
 
             do{
                 Socket socket = new Socket(addr, port);
                 System.out.println("\nConnected to " + socket.getRemoteSocketAddress());
+                packet.setSocket(socket);
 
                 String lobbyId = null;
                 choice = user.menu();
 
                 if (choice == user.CREATE_LOBBY){
-                    Lobby lobby = new Lobby(socket);
-                    CreateLobbyPacket sentLobby = lobby.createLobby(null, 4);
-                    lobby.send(sentLobby);
-                    CreateLobbyPacket receiveLobby = lobby.receive();
-                    lobbyId = receiveLobby.getLobbyId();
+                    CreateLobbyPacket createLobby = packet.createLobby(4);
+                    packet.send(createLobby.toByteArray());
+                    CreateLobbyPacket lobby = CreateLobbyPacket.parseFrom(packet.receive());
+                    lobbyId = lobby.getLobbyId();
                     System.out.println(user.getPlayer().getName() + " successfully created new lobby " + lobbyId + ".");
                 }
                 else if (choice == user.CONNECT_LOBBY) {
@@ -43,22 +40,22 @@ public class Client {
                     System.exit(0);
                 }
 
-                Connection connect = new Connection(socket);
-                ConnectPacket sentConnection = connect.createConnection(user.getPlayer(), lobbyId);
-                connect.send(sentConnection);
-                ConnectPacket receiveConnection = connect.receive();
-                user.setPlayer(receiveConnection.getPlayer());
+                ConnectPacket createConnection = packet.createConnection(user.getPlayer(), lobbyId);
+                packet.send(createConnection.toByteArray());
+                ConnectPacket connect = ConnectPacket.parseFrom(packet.receive());
+                user.setPlayer(connect.getPlayer());
                 System.out.println(user.getPlayer().getName() + " has joined to the lobby.");
 
-                ChatSend chatSend = new ChatSend(socket, user, lobbyId);
-                Thread chatS = new Thread(chatSend);
-                ChatReceive chatReceive = new ChatReceive(socket, user, lobbyId);
-                Thread chatR = new Thread(chatReceive);
-                chatS.start();
-                chatR.start();
+                ChatSend chatSend = new ChatSend(packet, user, lobbyId);
+                Thread send = new Thread(chatSend);
+                ChatReceive chatReceive = new ChatReceive(packet, user, lobbyId);
+                Thread receive = new Thread(chatReceive);
+
+                send.start();
+                receive.start();
                 try {
-                    chatS.join();
-                    chatR.join();
+                    send.join();
+                    receive.join();
                 } catch(Exception e) {};
 
                 socket.close();
