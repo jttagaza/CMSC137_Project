@@ -42,13 +42,13 @@ class ChatReceive implements Runnable {
                 case CONNECT:
                     ConnectPacket connect = ConnectPacket.parseFrom(bytes);
                     player = connect.getPlayer().getName();
-                    System.out.println(player + " has connected to the lobby.");
+                    System.out.println(player + " has joined to the lobby.");
                     break;
                 case CHAT:
                     ChatPacket chat = ChatPacket.parseFrom(bytes);
                     if(chat.getMessage().equals("quit")) {
                         if(chat.getPlayer().getName().equals(user.getPlayer().getName())){
-                            System.out.println(chat.getPlayer().getName() + " has disconnected from the lobby.");
+                            System.out.println(chat.getPlayer().getName() + " has left from the lobby.");
                             this.connected = false;
                         }
                     }
@@ -59,7 +59,7 @@ class ChatReceive implements Runnable {
                     break;
                 case DISCONNECT:
                     DisconnectPacket disconnect = DisconnectPacket.parseFrom(bytes);
-                    System.out.println(disconnect.getPlayer().getName() + " has disconnected from the lobby.");
+                    System.out.println(disconnect.getPlayer().getName() + " has left from the lobby.");
                     break;
             }
         }
