@@ -40,4 +40,8 @@ class User {
     public Player getPlayer() {
         return this.player;
     }
+
+    public void setPlayer(Player player) {
+        this.player = player;
+    }
 }

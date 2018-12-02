@@ -47,6 +47,7 @@ public class Client {
                 ConnectPacket sentConnection = connect.createConnection(user.getPlayer(), lobbyId);
                 connect.send(sentConnection);
                 ConnectPacket receiveConnection = connect.receive();
+                user.setPlayer(receiveConnection.getPlayer());
                 System.out.println(user.getPlayer().getName() + " has joined to the lobby.");
 
                 ChatSend chatSend = new ChatSend(socket, user, lobbyId);
