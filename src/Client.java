@@ -14,16 +14,16 @@ import java.io.IOException;
 import java.net.UnknownHostException;
 
 public class Client {
-    private Socket socket;
 
     public Client(String addr, int port) {
         try {
-            this.socket = new Socket(addr, port);
-            System.out.println("Connected to " + this.socket.getRemoteSocketAddress());
             User user = new User();
             int choice;
 
             do{
+                Socket socket = new Socket(addr, port);
+                System.out.println("\nConnected to " + socket.getRemoteSocketAddress());
+
                 String lobbyId = null;
                 choice = user.menu();
 
@@ -60,9 +60,8 @@ public class Client {
                     chatR.join();
                 } catch(Exception e) {};
 
+                socket.close();
             }while(choice != user.EXIT);
-
-            this.socket.close();
         }
         catch(UnknownHostException unEx) {
             unEx.printStackTrace();

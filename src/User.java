@@ -25,9 +25,11 @@ class User {
     }
 
     public int menu() {
+        System.out.println("-------- MENU --------");
         System.out.println("[1] Create Lobby");
         System.out.println("[2] Connect to a Lobby");
         System.out.println("[0] Exit");
+        System.out.println("----------------------");
         System.out.print("Enter choice: ");
 
         Scanner str = new Scanner(System.in);
