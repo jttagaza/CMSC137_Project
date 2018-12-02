@@ -47,7 +47,7 @@ class ChatReceive implements Runnable {
                 case CHAT:
                     ChatPacket chat = ChatPacket.parseFrom(bytes);
                     if(chat.getMessage().equals("quit")) {
-                        if(chat.getPlayer().getName().equals(user.getPlayer().getName())){
+                        if(chat.getPlayer().getId().equals(user.getPlayer().getId())){
                             System.out.println(chat.getPlayer().getName() + " has left from the lobby.");
                             this.connected = false;
                         }
