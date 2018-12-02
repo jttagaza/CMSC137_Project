@@ -11,5 +11,5 @@
         - make clean (Removing class files if necessary)
         - make build (Build dependencies and java classes)
         - make run   (Run the program)
-            
-(\*) Be sure to run *make clean* before pushing into the repository 
+
+* Be sure to run *make clean* before pushing into the repository 
