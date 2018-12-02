@@ -4,24 +4,16 @@ import packet.PlayerProtos.*;
 import packet.TcpPacketProtos.TcpPacket.*;
 import packet.TcpPacketProtos.TcpPacket;
 
-import java.io.InputStream;
-import java.io.OutputStream;
-import java.io.DataInputStream;
-import java.io.DataOutputStream;
-import java.net.Socket;
-import java.util.Scanner;
-
 import java.io.IOException;
-import java.net.UnknownHostException;
 
 class ChatReceive implements Runnable {
-    private Socket socket;
+    private Packet packet;
     private User user;
     private String lobbyId;
     private Boolean connected;
 
-    public ChatReceive(Socket socket, User user, String lobbyId) {
-        this.socket = socket;
+    public ChatReceive(Packet packet, User user, String lobbyId) {
+        this.packet = packet;
         this.user = user;
         this.lobbyId = lobbyId;
         this.connected = true;
@@ -29,20 +21,14 @@ class ChatReceive implements Runnable {
 
     void receive(){
         try {
-            InputStream input = this.socket.getInputStream();
-            DataInputStream receiver = new DataInputStream(input);
-            while(receiver.available() == 0){}
-            byte[] bytes = new byte[receiver.available()];
-            receiver.read(bytes);
-            TcpPacket receiveMsg = TcpPacket.parseFrom(bytes);
-            PacketType type = receiveMsg.getType();
-            String player;
+            byte[] bytes = packet.receive();
+            TcpPacket data = TcpPacket.parseFrom(bytes);
+            PacketType type = data.getType();
 
             switch(type){
                 case CONNECT:
                     ConnectPacket connect = ConnectPacket.parseFrom(bytes);
-                    player = connect.getPlayer().getName();
-                    System.out.println(player + " has joined to the lobby.");
+                    System.out.println(connect.getPlayer().getName() + " has joined to the lobby.");
                     break;
                 case CHAT:
                     ChatPacket chat = ChatPacket.parseFrom(bytes);
@@ -54,8 +40,6 @@ class ChatReceive implements Runnable {
                     }
                     else if(chat.hasPlayer())
                         System.out.println(chat.getPlayer().getName() + ": " + chat.getMessage());
-                    else
-                        System.out.println(user.getPlayer().getName() + ": " + chat.getMessage());
                     break;
                 case DISCONNECT:
                     DisconnectPacket disconnect = DisconnectPacket.parseFrom(bytes);
