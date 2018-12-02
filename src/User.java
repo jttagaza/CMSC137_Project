@@ -17,11 +17,11 @@ class User {
     public final static int CONNECT_LOBBY = 2;
     public final static int EXIT = 0;
 
-    public User() {
+    public User(Packet packet) {
         System.out.print("Enter Name: ");
         Scanner str = new Scanner(System.in);
         String name = str.nextLine();
-        this.player = Player.newBuilder().setName(name).build();
+        this.player = packet.createPlayer(name);
     }
 
     public int menu() {
