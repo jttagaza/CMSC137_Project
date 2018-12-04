@@ -1,5 +1,5 @@
-import src.*;
-import packet.*;
+import src.gameChat.*;
+import src.gamePacket.*;
 
 import java.io.IOException;
 
