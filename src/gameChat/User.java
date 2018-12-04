@@ -9,6 +9,7 @@ import java.util.Scanner;
 
 import java.io.IOException;
 import java.net.UnknownHostException;
+import java.util.InputMismatchException;
 
 class User {
     private Player player;
@@ -25,15 +26,29 @@ class User {
     }
 
     public int menu() {
-        System.out.println("-------- MENU --------");
-        System.out.println("[1] Create Lobby");
-        System.out.println("[2] Connect to a Lobby");
-        System.out.println("[0] Exit");
-        System.out.println("----------------------");
-        System.out.print("Enter choice: ");
+        Boolean check = true;
+        int choice = 0;
+        
+        while(check){
+            try {
+                check = false;
+                System.out.println("-------- MENU --------");
+                System.out.println("[1] Create Lobby");
+                System.out.println("[2] Connect to a Lobby");
+                System.out.println("[0] Exit");
+                System.out.println("----------------------");
+                System.out.print("Enter choice: ");
 
-        Scanner str = new Scanner(System.in);
-        int choice = str.nextInt();
+                Scanner str = new Scanner(System.in);
+                choice = str.nextInt();
+            }
+            catch(InputMismatchException err) {
+                check = true;
+                System.out.println("\nInvalid choice. Try again.\n");
+                continue;
+            }
+        }
+
         return choice;
     }
 
