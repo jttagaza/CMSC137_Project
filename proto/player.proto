@@ -1,6 +1,6 @@
 syntax = "proto2";
 
-option java_package = "packet";
+option java_package = "src.gamePacket";
 option java_outer_classname = "PlayerProtos";
 
 message Player {
