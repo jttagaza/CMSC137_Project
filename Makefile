@@ -12,4 +12,4 @@ run:
 	java $(JPATH) ".:./compiler/protobuf.jar":".:./bin" Main
 
 clean:
-	$(RM) $(RFLAGS) bin && $(RM) $(RFLAGS) src/gamePacket
+	rm $(RFLAGS) bin && rm $(RFLAGS) src/gamePacket
