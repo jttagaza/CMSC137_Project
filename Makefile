@@ -13,3 +13,4 @@ run:
 
 clean:
 	rm $(RFLAGS) bin && rm $(RFLAGS) src/gamePacket
+	clear
