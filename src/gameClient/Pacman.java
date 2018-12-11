@@ -119,10 +119,28 @@ public class Pacman extends Sprite implements Runnable{
 			default:
 				break;
 		}
+
+		this.g.sendData("PLAYER " + this.g.getUName() + " " + this.xPos + " " + this.yPos + " " + this.g.getScore());
 	}
 
 	public void setDirection(int direction){
 		this.direction = direction;
+	}
+
+	public void setXPos(int x){
+		this.xPos = x;
+	}
+
+	public void setYPos(int y){
+		this.yPos = y;
+	}
+
+	public int getX(){
+		return this.xPos;
+	}
+
+	public int getY(){
+		return this.yPos;
 	}
 
 	@Override

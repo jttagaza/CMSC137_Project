@@ -9,7 +9,7 @@ public class GameState {
 	private Map players = new HashMap();
 	
 	public void update(String name, User user){
-		players.put(name,user);
+		this.players.put(name,user);
 	}
 	
 	public String toString(){
@@ -17,12 +17,27 @@ public class GameState {
 		for(Iterator ite = players.keySet().iterator();ite.hasNext();){
 			String name = (String) ite.next();
 			User player = (User) players.get(name);
-			retval += player.toString()+":";
+			retval += "PLAYER " + player.getName() + " " + player.getX() + " " + player.getY() + " " + player.getScore() + ":";
 		}
 		return retval;
 	}
 	
 	public Map getPlayers(){
-		return players;
+		return this.players;
+	}
+
+	public User getMax(){
+		User topnotch = null;
+		int max = 0;
+		for(Iterator ite = players.keySet().iterator();ite.hasNext();){
+			String name = (String) ite.next();
+			User player = (User) players.get(name);
+			int score = player.getScore();
+			if(score > max){
+				max = score;
+				topnotch = player;
+			}
+		}
+		return topnotch;
 	}
 }

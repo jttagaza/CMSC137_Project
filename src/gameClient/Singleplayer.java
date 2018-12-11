@@ -22,7 +22,7 @@ public class Singleplayer extends JFrame{
 
 		Container container = this.getContentPane();	
 
-		Game game = new Game(container, frame); //Start Menu
+		Game game = new Game("localhost", "user", container, frame); //Start Menu
 
 		try{
 			container.removeAll();

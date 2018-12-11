@@ -1,14 +1,18 @@
 package src.gameClient;
 
+import src.gameServer.Constants;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.Toolkit;
 import java.awt.event.*;
 import java.util.*;
 import java.io.*;
+import java.net.DatagramPacket;
+import java.net.DatagramSocket;
+import java.net.InetAddress;
 import javax.imageio.ImageIO;
 
-public class Game extends JPanel{
+public class Game extends JPanel implements Runnable, Constants{
 	public JFrame jframe;
 	private int[][] map = new int[27][23];
 	public JButton back = new JButton("Main Menu");
@@ -18,6 +22,8 @@ public class Game extends JPanel{
 	public Ghost yellow = new Ghost(11, 10, "src/gameClient/ghost20.jpg", "Yellow", this);
 	public Ghost blue = new Ghost(13, 10, "src/gameClient/ghost31.jpg", "Blue", this);
 	public Ghost pink = new Ghost(15, 10, "src/gameClient/ghost41.jpg", "Pink", this);
+    private int x = 0;
+    private int y = 0;
 
 	public Thread pacmanThread = new Thread(pacman);
 	public Thread redThread = new Thread(red);
@@ -28,7 +34,24 @@ public class Game extends JPanel{
 	private int score = 0;
 	private boolean state = false;
 
-	public Game(Container container, JFrame frame){
+    private String sname;
+    private String uname;
+    private Thread t = new Thread(this);
+    private boolean connected = false;
+    private int pnum;
+    private DatagramSocket socket;
+
+	public Game(String servername, String username, Container container, JFrame frame){
+		this.setPreferredSize(new Dimension(1100,560));
+        this.sname = servername;
+        this.uname = username;
+        try {
+            this.socket = new DatagramSocket();
+            this.socket.setSoTimeout(100);
+        } catch(Exception e){
+            System.out.println(e);
+        }
+
 		this.jframe = frame;
 		this.setLayout(null);
 
@@ -77,12 +100,6 @@ public class Game extends JPanel{
 			}
 		}
 
-		this.pacmanThread.start();
-		this.redThread.start();
-		this.yellowThread.start();
-		this.blueThread.start();
-		this.pinkThread.start();
-
 		back.setBounds(375,10,160,30);
 		back.setFont(new Font("Impact", Font.BOLD, 20));
 		back.setBackground(Color.BLACK);
@@ -96,7 +113,18 @@ public class Game extends JPanel{
 				}catch(Exception z){}
 			}
 		});;
+		
+        t.start();
 	}
+
+    public void sendData(String msg){
+        try{
+            byte[] buf = msg.getBytes();
+            InetAddress address = InetAddress.getByName("localhost");//InetAddress.getLocalHost().toString());
+            DatagramPacket packet = new DatagramPacket(buf, buf.length, address, PORT);
+            socket.send(packet);
+        }catch(Exception e){}
+    }
 
 	public void addNotify(){
 		super.addNotify();
@@ -107,6 +135,22 @@ public class Game extends JPanel{
 	public int[][] getMap(){
 		return this.map;
 	}
+
+    public int getX(){
+        return this.x;
+    }
+
+    public int getY(){
+        return this.y;
+    }
+
+	public int getScore(){
+		return this.score;
+	}
+
+    public String getUName(){
+        return this.uname;  
+    }
 
 	public boolean checkVictory(){
 		for(int i = 0; i < 27; i++){
@@ -209,4 +253,87 @@ public class Game extends JPanel{
 		this.add(pacman);
 		Toolkit.getDefaultToolkit().sync();
 	}
+
+    public void run(){
+		byte[] buf = null;
+		DatagramPacket packet = null;
+		String serverData = null;
+
+        while(!this.checkVictory() && !this.checkDefeat()){
+            try{
+                Thread.sleep(1);
+            }catch(Exception ioe){}
+
+            buf = new byte[256];
+            packet = new DatagramPacket(buf, buf.length);
+            
+            try{
+                socket.receive(packet);
+            }catch(Exception ioe){}
+
+            serverData = new String(buf);
+            serverData = serverData.trim();
+
+            if(!connected && serverData.startsWith("CONNECTED")){
+                connected = true;
+            }else if(!connected){
+                sendData("CONNECT " + this.uname);
+            }else if(connected){
+                System.out.println(serverData);
+
+                if(serverData.startsWith("START")) {
+                    this.pacmanThread.start();
+                    this.redThread.start();
+                    this.yellowThread.start();
+                    this.blueThread.start();
+                    this.pinkThread.start();
+                }
+                if(serverData.startsWith("PLAYER")){
+                    String[] playersInfo = serverData.split(":");
+                    for(int i = 0; i < playersInfo.length; i++){
+                        String[] playerInfo = playersInfo[i].split(" ");
+                        String pname = playerInfo[1];
+                        int x = Integer.parseInt(playerInfo[2]);
+                        int y = Integer.parseInt(playerInfo[3]);
+						int score = Integer.parseInt(playerInfo[4]);
+                    }
+
+                    this.repaint();
+                }
+            }
+        }
+
+		boolean isWait = true;
+		while(connected){
+			if(isWait){
+				sendData("WAITING " + this.uname);
+				isWait = false;
+			}
+
+			if(serverData.startsWith("END")){
+				connected = false;
+				String[] playerInfo = serverData.split(" ");
+				String winner = playerInfo[1];
+				int max = Integer.parseInt(playerInfo[2]);
+
+				JOptionPane.showMessageDialog(this.jframe,"The winner is " + winner + " with the score of " + max + " points!");
+			}
+
+			try{
+                Thread.sleep(1);
+            }catch(Exception ioe){}
+
+            buf = new byte[256];
+            packet = new DatagramPacket(buf, buf.length);
+            
+            try{
+                socket.receive(packet);
+            }catch(Exception ioe){}
+
+            serverData = new String(buf);
+            serverData = serverData.trim();
+		}
+    }
+
+
 }

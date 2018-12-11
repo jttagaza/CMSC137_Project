@@ -39,9 +39,10 @@ public class Homepage extends JPanel{
 		this.splayer.addActionListener(new ActionListener(){
 			public void actionPerformed(ActionEvent e){
 				try{
-					frame.dispose();
-					Singleplayer singleplayer = new Singleplayer();
-					singleplayer.setVisible(true);
+					frame.dispatchEvent(new WindowEvent(frame, WindowEvent.WINDOW_CLOSING));		
+					// frame.dispose();
+					// Singleplayer singleplayer = new Singleplayer();
+					// singleplayer.setVisible(true);
 				}catch(Exception z){}
 			}
 		});;

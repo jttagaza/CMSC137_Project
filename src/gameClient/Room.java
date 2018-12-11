@@ -43,11 +43,18 @@ public class Room extends JPanel{
 		this.join.addActionListener(new ActionListener(){
 			public void actionPerformed(ActionEvent e){
 				try{
-					System.out.println(username.getText());
-					frame.dispose();
-					Multiplayer multiplayer = new Multiplayer();
-					multiplayer.setVisible(true);
-				}catch(Exception z){}
+					String sname = "localhost";
+					String uname = username.getText();
+					if(!uname.equals("")){
+						frame.dispose();
+						Multiplayer multiplayer = new Multiplayer(sname, uname);
+						multiplayer.setVisible(true);
+					}else{
+						username.setText("Username is required");
+					}
+				}catch(Exception z){
+					System.out.println(z);
+				}
 			}
 		});;
 
