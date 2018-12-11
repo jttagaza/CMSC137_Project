@@ -6,12 +6,12 @@ import java.util.*;
 import java.io.*;
 import javax.imageio.ImageIO;
 
-public class Singleplayer extends JFrame{
-	public static final int DIMENSION_X = 550;
+public class Multiplayer extends JFrame{
+	public static final int DIMENSION_X = 1100;
 	public static final int DIMENSION_Y = 560;
 	private JFrame frame = this;
 
-	public Singleplayer(){
+	public Multiplayer(){
 		this.setPreferredSize(new Dimension(DIMENSION_X,DIMENSION_Y));
 		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		this.setResizable(false);
@@ -21,10 +21,12 @@ public class Singleplayer extends JFrame{
 		Container container = this.getContentPane();	
 
 		Sgame sgame = new Sgame(container, frame); //Start Menu
+		Chat chat = new Chat();
 
 		try{
 			container.removeAll();
 			container.add(sgame);
+			container.add(chat);
 			container.revalidate();
 			container.repaint();
 		}catch(Exception e){}

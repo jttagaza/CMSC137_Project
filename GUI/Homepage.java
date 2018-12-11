@@ -47,11 +47,9 @@ public class Homepage extends JPanel{
 		this.mplayer.addActionListener(new ActionListener(){
 			public void actionPerformed(ActionEvent e){
 				try{
-					// Instructions instructions = new Instructions(container, frame);
-					// container.removeAll();
-					// container.add(instructions);
-					// container.revalidate();
-					// container.repaint();
+					frame.dispose();
+					Lobby lobby = new Lobby();
+					lobby.setVisible(true);
 				}catch(Exception z){}
 			}
 		});
