@@ -1,3 +1,5 @@
+package src.gameClient;
+
 import javax.swing.*;
 import java.awt.*;
 import java.awt.Toolkit;
@@ -10,15 +12,15 @@ public class Ghost extends Sprite implements Runnable{
 	private String filename;
 	private String name;
 	private int direction;
-	private Sgame sg;
+	private Game g;
 	private int id;
 
-	public Ghost(int x, int y, String sprite, String name, Sgame sg){
+	public Ghost(int x, int y, String sprite, String name, Game g){
 		super(x,y,sprite);
 		this.filename = sprite;
 		this.name = name;
 		this.direction = 0;
-		this.sg = sg;
+		this.g = g;
 
 		if(this.name.equals("Red")) this.id = 10;
 		if(this.name.equals("Yellow")) this.id = 20;
@@ -30,7 +32,7 @@ public class Ghost extends Sprite implements Runnable{
 		Random r = new Random();
 		int n = r.nextInt(4) + 1;
 
-		int[][] temp = this.sg.getMap();
+		int[][] temp = this.g.getMap();
 		switch(n){
 			case 1:
 				if(xPos != 0 && (temp[xPos-1][yPos] == 1 || temp[xPos-1][yPos] == 2) && xPos != 1) this.direction = n;
@@ -52,8 +54,8 @@ public class Ghost extends Sprite implements Runnable{
 		switch(this.direction){
 			case 1: //LEFTWARD
 				if(xPos == 0 && yPos == 10){
-					if(temp[26][yPos] == 3) this.sg.setDefeat(true);
-					this.sg.updateMap(tempid, xPos, yPos, 26, yPos);
+					if(temp[26][yPos] == 3) this.g.setDefeat(true);
+					this.g.updateMap(tempid, xPos, yPos, 26, yPos);
 					this.xPos = 26;
 				}else if(xPos != 1 && temp[xPos-1][yPos] == 1 || temp[xPos-1][yPos] == 2 || temp[xPos-1][yPos] == 3){
 					if(this.name.equals("Red")){
@@ -76,8 +78,8 @@ public class Ghost extends Sprite implements Runnable{
 						if(temp[xPos-1][yPos] == 2) this.id = 40;
 					}
 
-					if(temp[xPos-1][yPos] == 3) this.sg.setDefeat(true);
-					this.sg.updateMap(tempid, xPos, yPos, xPos-1, yPos);
+					if(temp[xPos-1][yPos] == 3) this.g.setDefeat(true);
+					this.g.updateMap(tempid, xPos, yPos, xPos-1, yPos);
 					this.xPos -= 1;
 				}
 
@@ -87,8 +89,8 @@ public class Ghost extends Sprite implements Runnable{
 
 			case 2: //RIGHTWARD
 				if(xPos == 26 && yPos == 10){
-					if(temp[0][yPos] == 3) this.sg.setDefeat(true);
-					this.sg.updateMap(tempid, xPos, yPos, 0, yPos);
+					if(temp[0][yPos] == 3) this.g.setDefeat(true);
+					this.g.updateMap(tempid, xPos, yPos, 0, yPos);
 					this.xPos = 0;
 				}else if(xPos != 25 && temp[xPos+1][yPos] == 1 || temp[xPos+1][yPos] == 2 || temp[xPos+1][yPos] == 3){
 					if(this.name.equals("Red")){
@@ -111,8 +113,8 @@ public class Ghost extends Sprite implements Runnable{
 						if(temp[xPos+1][yPos] == 2) this.id = 40;
 					}
 
-					if(temp[xPos+1][yPos] == 3) this.sg.setDefeat(true);
-					this.sg.updateMap(tempid, xPos, yPos, xPos+1, yPos);
+					if(temp[xPos+1][yPos] == 3) this.g.setDefeat(true);
+					this.g.updateMap(tempid, xPos, yPos, xPos+1, yPos);
 					this.xPos += 1;
 				}
 
@@ -146,8 +148,8 @@ public class Ghost extends Sprite implements Runnable{
 						loadImage("ghost41.jpg");
 					}
 
-					if(temp[xPos][yPos-1] == 3) this.sg.setDefeat(true);
-					this.sg.updateMap(tempid, xPos, yPos, xPos, yPos-1);
+					if(temp[xPos][yPos-1] == 3) this.g.setDefeat(true);
+					this.g.updateMap(tempid, xPos, yPos, xPos, yPos-1);
 					this.yPos -= 1;
 				}
 
@@ -180,8 +182,8 @@ public class Ghost extends Sprite implements Runnable{
 						loadImage("ghost40.jpg");
 					}
 
-					if(temp[xPos][yPos+1] == 3) this.sg.setDefeat(true);
-					this.sg.updateMap(tempid, xPos, yPos, xPos, yPos+1);
+					if(temp[xPos][yPos+1] == 3) this.g.setDefeat(true);
+					this.g.updateMap(tempid, xPos, yPos, xPos, yPos+1);
 					this.yPos += 1;
 				}
 
@@ -201,7 +203,7 @@ public class Ghost extends Sprite implements Runnable{
 
 	@Override
 	public void run(){
-		while(!this.sg.checkVictory() && !this.sg.checkDefeat()){
+		while(!this.g.checkVictory() && !this.g.checkDefeat()){
 			this.move();
 			this.repaint();
 

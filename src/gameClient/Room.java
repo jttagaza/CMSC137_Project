@@ -1,3 +1,5 @@
+package src.gameClient;
+
 import javax.swing.*;
 import java.awt.*;
 import java.awt.Toolkit;
@@ -15,7 +17,7 @@ public class Room extends JPanel{
 
 	public Room(Container container, JFrame frame){
 		try{
-			image = Toolkit.getDefaultToolkit().getImage("homepage.jpg");
+			image = Toolkit.getDefaultToolkit().getImage("src/gameClient/homepage.jpg");
 		}catch(Exception e){}
 		this.setLayout(null);
 
@@ -41,6 +43,7 @@ public class Room extends JPanel{
 		this.join.addActionListener(new ActionListener(){
 			public void actionPerformed(ActionEvent e){
 				try{
+					System.out.println(username.getText());
 					frame.dispose();
 					Multiplayer multiplayer = new Multiplayer();
 					multiplayer.setVisible(true);

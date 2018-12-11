@@ -1,4 +1,4 @@
-package src;
+package src.gameServer;
 
 public interface Constants {
     public final static int PORT = 7531;

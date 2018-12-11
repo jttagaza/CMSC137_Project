@@ -1,3 +1,5 @@
+package src.gameClient;
+
 import javax.swing.*;
 import java.awt.*;
 import java.awt.Toolkit;
@@ -14,7 +16,7 @@ public class Homepage extends JPanel{
 
 	public Homepage(Container container, JFrame frame){
 		try{
-			image = Toolkit.getDefaultToolkit().getImage("homepage.jpg");
+			image = Toolkit.getDefaultToolkit().getImage("src/gameClient/homepage.jpg");
 		}catch(Exception e){}
 		this.setLayout(null);
 

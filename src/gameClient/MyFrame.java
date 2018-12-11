@@ -1,3 +1,5 @@
+package src.gameClient;
+
 import javax.swing.*;
 import java.awt.*;
 import java.awt.Toolkit;

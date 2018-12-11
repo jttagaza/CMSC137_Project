@@ -1,3 +1,5 @@
+package src.gameClient;
+
 import javax.swing.*;
 import java.awt.*;
 import java.awt.Toolkit;
@@ -6,16 +8,16 @@ import java.util.*;
 import java.io.*;
 import javax.imageio.ImageIO;
 
-public class Sgame extends JPanel{
+public class Game extends JPanel{
 	public JFrame jframe;
 	private int[][] map = new int[27][23];
 	public JButton back = new JButton("Main Menu");
 
-	public Pacman pacman = new Pacman(13, 17,"pacman.jpg", this);
-	public Ghost red = new Ghost(13, 8, "ghost10.jpg", "Red", this);
-	public Ghost yellow = new Ghost(11, 10, "ghost20.jpg", "Yellow", this);
-	public Ghost blue = new Ghost(13, 10, "ghost31.jpg", "Blue", this);
-	public Ghost pink = new Ghost(15, 10, "ghost41.jpg", "Pink", this);
+	public Pacman pacman = new Pacman(13, 17,"src/gameClient/pacman.jpg", this);
+	public Ghost red = new Ghost(13, 8, "src/gameClient/ghost10.jpg", "Red", this);
+	public Ghost yellow = new Ghost(11, 10, "src/gameClient/ghost20.jpg", "Yellow", this);
+	public Ghost blue = new Ghost(13, 10, "src/gameClient/ghost31.jpg", "Blue", this);
+	public Ghost pink = new Ghost(15, 10, "src/gameClient/ghost41.jpg", "Pink", this);
 
 	public Thread pacmanThread = new Thread(pacman);
 	public Thread redThread = new Thread(red);
@@ -26,7 +28,7 @@ public class Sgame extends JPanel{
 	private int score = 0;
 	private boolean state = false;
 
-	public Sgame(Container container, JFrame frame){
+	public Game(Container container, JFrame frame){
 		this.jframe = frame;
 		this.setLayout(null);
 
@@ -161,7 +163,7 @@ public class Sgame extends JPanel{
 		Graphics2D g2d = (Graphics2D) g;
 
 		g2d.setColor(Color.BLACK);
-		g2d.fillRect(0,0,600,580);
+		g2d.fillRect(0,0,550,560);
 
 		for(int i = 0; i < 27; i++){
 			for(int j = 0; j < 23; j++){

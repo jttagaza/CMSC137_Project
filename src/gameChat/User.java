@@ -11,18 +11,21 @@ import java.io.IOException;
 import java.net.UnknownHostException;
 import java.util.InputMismatchException;
 
-class User {
+public class User {
     private Player player;
+    private String name;
+    private int x, y;
 
     public final static int CREATE_LOBBY = 1;
     public final static int CONNECT_LOBBY = 2;
     public final static int EXIT = 0;
 
-    public User(Packet packet) {
-        System.out.print("Enter Name: ");
-        Scanner str = new Scanner(System.in);
-        String name = str.nextLine();
-        this.player = packet.createPlayer(name);
+    public User(String name) {
+        this.name = name;
+        // System.out.print("Enter Name: ");
+        // Scanner str = new Scanner(System.in);
+        // String name = str.nextLine();
+        // this.player = packet.createPlayer(name);
     }
 
     public int menu() {
@@ -56,7 +59,31 @@ class User {
         return this.player;
     }
 
+    public void setPacket(Packet packet) {
+        this.player = packet.createPlayer(this.name);
+    }
+
     public void setPlayer(Player player) {
         this.player = player;
     }
+
+    public String getName(){
+		return name;
+	}
+
+	public void setX(int x){
+		this.x = x;
+	}
+
+	public int getX(){
+		return x;
+	}
+	
+	public int getY(){
+		return y;
+	}
+
+	public void setY(int y){
+		this.y = y;		
+	}
 }

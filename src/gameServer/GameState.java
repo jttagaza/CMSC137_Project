@@ -1,0 +1,28 @@
+package src.gameServer;
+
+import src.gameChat.User;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.Map;
+
+public class GameState {
+	private Map players = new HashMap();
+	
+	public void update(String name, User user){
+		players.put(name,user);
+	}
+	
+	public String toString(){
+		String retval = "";
+		for(Iterator ite = players.keySet().iterator();ite.hasNext();){
+			String name = (String) ite.next();
+			User player = (User) players.get(name);
+			retval += player.toString()+":";
+		}
+		return retval;
+	}
+	
+	public Map getPlayers(){
+		return players;
+	}
+}

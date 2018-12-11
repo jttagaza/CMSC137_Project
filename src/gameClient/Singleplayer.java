@@ -1,3 +1,5 @@
+package src.gameClient;
+
 import javax.swing.*;
 import java.awt.*;
 import java.awt.Toolkit;
@@ -20,66 +22,66 @@ public class Singleplayer extends JFrame{
 
 		Container container = this.getContentPane();	
 
-		Sgame sgame = new Sgame(container, frame); //Start Menu
+		Game game = new Game(container, frame); //Start Menu
 
 		try{
 			container.removeAll();
-			container.add(sgame);
+			container.add(game);
 			container.revalidate();
 			container.repaint();
 		}catch(Exception e){}
 
-		sgame.addKeyListener(new KeyListener(){
+		game.addKeyListener(new KeyListener(){
 			public void keyTyped(KeyEvent e){}
 			public void keyReleased(KeyEvent e){}
 			public void keyPressed(KeyEvent e){
 				int key = e.getKeyCode();
 
 				if(key == KeyEvent.VK_UP){
-					sgame.pacman.setDirection(3);
-					sgame.pacman.loadImage("pacmanup.jpg");
+					game.pacman.setDirection(3);
+					game.pacman.loadImage("src/gameClient/pacmanup.jpg");
 					repaint();
-					sgame.pacman.loadImage("pacman.jpg");
+					game.pacman.loadImage("src/gameClient/pacman.jpg");
 					repaint();
-					sgame.pacman.loadImage("pacmanup.jpg");
+					game.pacman.loadImage("src/gameClient/pacmanup.jpg");
 					repaint();
-					sgame.pacman.loadImage("pacman.jpg");
+					game.pacman.loadImage("src/gameClient/pacman.jpg");
 					repaint();
 				}
 
 				if(key == KeyEvent.VK_DOWN){
-					sgame.pacman.setDirection(4);
-					sgame.pacman.loadImage("pacmandown.jpg");
+					game.pacman.setDirection(4);
+					game.pacman.loadImage("src/gameClient/pacmandown.jpg");
 					repaint();
-					sgame.pacman.loadImage("pacman.jpg");
+					game.pacman.loadImage("src/gameClient/pacman.jpg");
 					repaint();
-					sgame.pacman.loadImage("pacmandown.jpg");
+					game.pacman.loadImage("src/gameClient/pacmandown.jpg");
 					repaint();
-					sgame.pacman.loadImage("pacman.jpg");
+					game.pacman.loadImage("src/gameClient/pacman.jpg");
 					repaint();
 				}
 
 				if(key == KeyEvent.VK_LEFT){
-					sgame.pacman.setDirection(1);
-					sgame.pacman.loadImage("pacmanleft.jpg");
+					game.pacman.setDirection(1);
+					game.pacman.loadImage("src/gameClient/pacmanleft.jpg");
 					repaint();
-					sgame.pacman.loadImage("pacman.jpg");
+					game.pacman.loadImage("src/gameClient/pacman.jpg");
 					repaint();
-					sgame.pacman.loadImage("pacmanleft.jpg");
+					game.pacman.loadImage("src/gameClient/pacmanleft.jpg");
 					repaint();
-					sgame.pacman.loadImage("pacman.jpg");
+					game.pacman.loadImage("src/gameClient/pacman.jpg");
 					repaint();
 				}
 
 				if(key == KeyEvent.VK_RIGHT){
-					sgame.pacman.setDirection(2);
-					sgame.pacman.loadImage("pacmanright.jpg");
+					game.pacman.setDirection(2);
+					game.pacman.loadImage("src/gameClient/pacmanright.jpg");
 					repaint();
-					sgame.pacman.loadImage("pacman.jpg");
+					game.pacman.loadImage("src/gameClient/pacman.jpg");
 					repaint();
-					sgame.pacman.loadImage("pacmanright.jpg");
+					game.pacman.loadImage("src/gameClient/pacmanright.jpg");
 					repaint();
-					sgame.pacman.loadImage("pacman.jpg");
+					game.pacman.loadImage("src/gameClient/pacman.jpg");
 					repaint();
 				}
 			}

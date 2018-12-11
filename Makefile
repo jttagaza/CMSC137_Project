@@ -3,12 +3,14 @@ JPATH = -cp
 JFLAGS = -d
 RFLAGS = -rf
 
-build:
+server:
+	$(JC) $(JPATH) ".:./compiler/protobuf.jar" $(JFLAGS) bin src/gameServer/*.java
+	java $(JPATH) ".:./compiler/protobuf.jar":".:./bin" src/gameServer/GameServer
+
+client:
 	protoc -I=. --java_out=. ./proto/player.proto
 	protoc -I=. --java_out=. ./proto/tcp_packet.proto
 	$(JC) $(JPATH) ".:./compiler/protobuf.jar" $(JFLAGS) bin *.java
-
-run:
 	java $(JPATH) ".:./compiler/protobuf.jar":".:./bin" Main
 
 clean:
