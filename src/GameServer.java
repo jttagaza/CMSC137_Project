@@ -45,17 +45,30 @@ public class GameServer implements Runnable, Constants {
         while(true) {
             byte[] buf = new byte[256];
             DatagramPacket packet = new DatagramPacket(buf, buf.length);
-            Player player = new String(buf);
+            
+            try{
+                this.serverSocket.receive(packet);
+            }catch(Exception ioe){}
+
+            String player = new String(buf);
             player = player.trim();
 
             switch(gameStatus) {
                 case WAIT:
+                    if(player.startsWith("CONNECT")){
+                        String tokens[] = playerData.split(" ");
+                        User 
+                    }
                     break;
+                
                 case START:
                     break;
+                
                 case INGAME:
                     break;
+                
                 case END:
+                    break;
             }
         }
     }
