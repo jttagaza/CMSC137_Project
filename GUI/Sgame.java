@@ -11,7 +11,7 @@ public class Sgame extends JPanel{
 	private int[][] map = new int[27][23];
 	public JButton back = new JButton("Main Menu");
 
-	public Pacman pacman = new Pacman(13,17,"pacman.jpg", this);
+	public Pacman pacman = new Pacman(13, 17,"pacman.jpg", this);
 	public Ghost red = new Ghost(13, 8, "ghost10.jpg", "Red", this);
 	public Ghost yellow = new Ghost(11, 10, "ghost20.jpg", "Yellow", this);
 	public Ghost blue = new Ghost(13, 10, "ghost31.jpg", "Blue", this);
