@@ -98,7 +98,7 @@ public class GameServer implements Runnable, Constants {
                         this.playerCount += 1;
                         this.endCount += 1;
 
-                        if(this.playerCount >= 2) this.gameStatus = START;
+                        if(this.playerCount >= 3) this.gameStatus = START;
                     }
                     break;
                 case START:
