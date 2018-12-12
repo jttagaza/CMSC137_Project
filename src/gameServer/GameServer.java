@@ -98,10 +98,6 @@ public class GameServer implements Runnable, Constants {
                         this.playerCount += 1;
                         this.endCount += 1;
 
-                        if(this.playerCount == 1) {
-                            Client client = new Client(user, "202.92.144.45", 80);
-                        }
-
                         if(this.playerCount >= 2) this.gameStatus = START;
                     }
                     break;
