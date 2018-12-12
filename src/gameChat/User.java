@@ -5,6 +5,7 @@ import src.gamePacket.TcpPacketProtos;
 
 import java.net.Socket;
 import java.net.ServerSocket;
+import java.net.InetAddress;
 import java.util.Scanner;
 
 import java.io.IOException;
@@ -15,13 +16,19 @@ public class User {
     private Player player;
     private String name;
     private int x, y;
+    private InetAddress address;
+    private int port;
+    private int score;
 
     public final static int CREATE_LOBBY = 1;
     public final static int CONNECT_LOBBY = 2;
     public final static int EXIT = 0;
 
-    public User(String name) {
+    public User(String name, InetAddress address, int port) {
         this.name = name;
+        this.address = address;
+        this.port = port;
+        this.score = 0;
         // System.out.print("Enter Name: ");
         // Scanner str = new Scanner(System.in);
         // String name = str.nextLine();
@@ -86,4 +93,20 @@ public class User {
 	public void setY(int y){
 		this.y = y;		
 	}
+
+    public InetAddress getAddress() {
+        return this.address;
+    }
+
+    public int getPort() {
+        return this.port;
+    }
+
+    public void setScore(int score) {
+        this.score = score;
+    }
+
+    public int getScore() {
+        return this.score;
+    }
 }
