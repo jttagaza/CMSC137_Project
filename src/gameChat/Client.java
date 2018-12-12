@@ -12,9 +12,13 @@ import java.net.UnknownHostException;
 
 public class Client {
 
-    public Client(User user, String addr, int port) {
+    public Client(String addr, int port) {
         try {
             Packet packet = new Packet();
+            System.out.print("Enter Name: ");
+            Scanner st = new Scanner(System.in);
+            String name = st.nextLine();
+            User user = new User(name, null, 0);
             user.setPacket(packet);
             // User user = new User(packet);
             int choice;
