@@ -120,7 +120,7 @@ public class Game extends JPanel implements Runnable, Constants{
     public void sendData(String msg){
         try{
             byte[] buf = msg.getBytes();
-            InetAddress address = InetAddress.getByName("localhost");//InetAddress.getLocalHost().toString());
+            InetAddress address = InetAddress.getByName(InetAddress.getLocalHost().getHostAddress());//InetAddress.getLocalHost().toString());
             DatagramPacket packet = new DatagramPacket(buf, buf.length, address, PORT);
             socket.send(packet);
         }catch(Exception e){}
